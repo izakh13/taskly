@@ -1,0 +1,6 @@
+<h1>My tasks</h1>
+<ul>
+    {% for task in tasks %}
+        <li>{{ task.title }} ({{ task.created_at }})</li>
+    {% endfor %}
+</ul>
