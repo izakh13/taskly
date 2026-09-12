@@ -19,7 +19,7 @@ def test_task_create(client):
 
 @pytest.mark.django_db
 @patch('tasks.views.improve_task_description')
-def test_improve_test_description(mocke_improve, client):
+def test_improve_test_description(mock_improve, client):
     improved_task_description = 'Improved task description'
     mock_improve.return_value = improved_task_description
     task = Task.objects.create(title='Task title', description='Task description')
