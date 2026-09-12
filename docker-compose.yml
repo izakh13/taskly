@@ -12,6 +12,7 @@ services:
     volumes:
       - .:/app
       - /app/venv
+      - /app/staticfiles
     depends_on:
       - db
     env_file:
