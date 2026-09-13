@@ -1,5 +1,17 @@
 <h1>My tasks</h1>
 <a href='{% url 'task_create' %}'>New task</a>
+{% if user.is_authenticated %}
+<p>{{ user }}</p>
+<form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">Logout</button>
+</form>
+{% else %}
+<form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    <button type="submit">Login</button>
+</form>
+{% endif%}
 <ul>
     {% for task in tasks %}
         <li>{{ task.title }} ({{ task.created_at }}) ({{ task.description }}) 
