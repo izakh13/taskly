@@ -30,4 +30,3 @@ git clone https://github.com/izakh13/taskly.git
 cd taskly
 docker-compose up --build
 ```
-**ALL URLs are insecure. Everyone can create, delete, update tasks**
