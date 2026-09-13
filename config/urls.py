@@ -16,8 +16,9 @@ Including another URLconf
 """
 from rest_framework.routers import DefaultRouter
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 from django.urls import path, include
-from tasks.views import TaskViewSet
+from tasks.views import TaskViewSet, register
 
 router = DefaultRouter()
 router.register('api/tasks', TaskViewSet)
@@ -26,4 +27,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('tasks/', include('tasks.urls')),
     path('', include(router.urls)),
+    path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
+    path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('accounts/register/', register, name='register')
 ]
