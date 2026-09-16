@@ -37,3 +37,10 @@ def test_improve_test_description(mock_improve, authenticated_client):
 def test_api_require_authorisation(client):
     response = client.get('/api/tasks/')
     assert response.status_code == status.HTTP_403_FORBIDDEN
+
+@pytest.mark.django_db
+def test_delete(authenticated_client):
+    task = Task.objects.create(title='Task title', description='Task description', owner=authenticated_client.user)
+    response = authenticated_client.post(reverse('delete', args=[task.id]))
+    assert not Task.objects.filter(id=task.id).exists()
+    assert response.status_code == status.HTTP_302_FOUND
