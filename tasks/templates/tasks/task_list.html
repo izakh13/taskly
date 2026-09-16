@@ -7,17 +7,19 @@
     <button type="submit">Logout</button>
 </form>
 {% else %}
-<form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-    <button type="submit">Login</button>
-</form>
+<a href="{% url 'login' %}">Login</a>
 {% endif%}
 <ul>
     {% for task in tasks %}
         <li>{{ task.title }} ({{ task.created_at }}) ({{ task.description }}) 
             <form method="post" action="{% url 'improve' task.id %}">
                 {% csrf_token %}
-                <button type="submit">Improve description</button></li>
+                <button type="submit">Improve description</button>
             </form>
+            <form method="post" action="{% url 'delete' task.id %}">
+                {% csrf_token %}
+                <button type="submit">Delete</button>
+            </form>
+        </li>
     {% endfor %}
 </ul>

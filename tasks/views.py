@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Task
 from .forms import TaskForm
@@ -54,4 +54,10 @@ def register(request):
             return redirect('task_list')
     else:
         form = UserCreationForm()
-    return render(request, 'registration/login.html', {'form': form})    
+    return render(request, 'registration/login.html', {'form': form})
+
+@login_required
+def task_delete(request, task_id):
+    task = get_object_or_404(Task, owner=request.user, id=task_id)
+    task.delete()
+    return redirect('task_list')
