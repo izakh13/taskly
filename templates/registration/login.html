@@ -1,7 +1,25 @@
-<h1>Login</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
-    <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
-</form>
+{% extends 'base.html' %}
+{% block custom_style %}
+<style>
+    #helptext {
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-center">
+    <div class="text-center">
+        <h1 class="mb-4">Login</h1>
+        <form method="post" class="p-4 border rounded shadow bg-light">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Login</button>
+            <div class="d-flex flex-row align-items-center gap-2">
+                <div id="helptext" class="p-2">Don't have an account?</div>
+                <a class="p-2" href="{% url 'register' %}">Register here</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
