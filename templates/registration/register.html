@@ -1,6 +1,30 @@
-<h1>Registration</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Register</button>
-</form>
+{% extends 'base.html' %}
+{% block custom_style %}
+<style>
+    .helptext {
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+    .helptext ul {
+        padding-left: 1.2rem;
+        margin-bottom: 0;
+    }
+    li {
+        list-style-type: none;
+        font-size: 0.85rem;
+        color: #6c757d
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-center">
+    <div class="text-center">
+        <h1 class="mb-4">Registration</h1>
+        <form method="post" class="p-4 border rounded shadow bg-light">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
