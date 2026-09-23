@@ -27,6 +27,18 @@
             {% endif %}
         </div>
     </nav>
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        {% for message in messages %}
+        <div class="toast align-items-center text-bg-success border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body">
+                    {{message}}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
     <div class="container mt-4">
         {% block content%}
         {% endblock %}
@@ -35,6 +47,10 @@
     <script>
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
         [...tooltipTriggerList].map(el => new bootstrap.Tooltip(el));
+
+        const toastElList = document.querySelectorAll('.toast')
+        const toastList = [...toastElList].map(el => new bootstrap.Toast(el))
+        toastList.forEach(toast => toast.show())
     </script>
 </body>
 </html>
