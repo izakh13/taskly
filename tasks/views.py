@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import login 
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Task
 from .forms import TaskForm, StyledUserCreationForm
@@ -32,6 +33,7 @@ def task_create(request):
             task = form.save(commit=False)
             task.owner = request.user
             task.save()
+            messages.success(request, 'Task created successfully!')
             return redirect('task_list')
     else:
         form = TaskForm()
@@ -42,6 +44,7 @@ def task_improve_description(request, task_id):
     task = Task.objects.filter(owner=request.user).get(id=task_id)
     task.description = improve_task_description(task.description)
     task.save()
+    messages.success(request, 'Task updated successfully!')
     return redirect('task_list')
 
 def register(request):
@@ -59,4 +62,5 @@ def register(request):
 def task_delete(request, task_id):
     task = get_object_or_404(Task, owner=request.user, id=task_id)
     task.delete()
+    messages.success(request, 'Task deleted successfully!')
     return redirect('task_list')
