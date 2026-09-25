@@ -37,7 +37,7 @@ def task_create(request):
             return redirect('task_list')
     else:
         form = TaskForm()
-    return render(request, 'tasks/task_form.html', {'form': form})
+    return render(request, 'tasks/task_form.html', {'form': form, 'form_title': 'New task', 'form_button': 'Create'})
 
 @login_required
 def task_improve_description(request, task_id):
@@ -64,3 +64,16 @@ def task_delete(request, task_id):
     task.delete()
     messages.success(request, 'Task deleted successfully!')
     return redirect('task_list')
+
+@login_required
+def task_edit(request, task_id):
+    task = get_object_or_404(Task, owner=request.user, id=task_id)
+    if request.method == 'POST':
+        form = TaskForm(request.POST, instance=task)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Task updated successfully!')
+            return redirect('task_list')
+    else:
+        form = TaskForm(instance=task)
+    return render(request, 'tasks/task_form.html', {'form': form, 'form_title': f'Edit {task.title}', 'form_button': 'Save'})

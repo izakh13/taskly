@@ -44,3 +44,15 @@ def test_delete(authenticated_client):
     response = authenticated_client.post(reverse('delete', args=[task.id]))
     assert not Task.objects.filter(id=task.id).exists()
     assert response.status_code == status.HTTP_302_FOUND
+
+@pytest.mark.django_db
+def test_edit(authenticated_client):
+    task = Task.objects.create(title="Old title", description="Old description", owner=authenticated_client.user)
+    response = authenticated_client.post(reverse('edit', args=[task.id]), {
+        'title': 'New title',
+        'description': 'New description'
+    })
+    assert response.status_code == status.HTTP_302_FOUND
+    task.refresh_from_db()
+    assert task.title == 'New title'
+    assert task.description == 'New description'
