@@ -1,4 +1,5 @@
 ![CI](https://github.com/izakh13/taskly/actions/workflows/ci.yml/badge.svg)
+![codecov](https://codecov.io/gh/izakh13/taskly/branch/main/graph/badge.svg)
 ![Python](https://img.shields.io/badge/Python-3.14.4-blue)
 ![Django](https://img.shields.io/badge/Django-6.1.1-green)
 # TASKLY
