@@ -22,6 +22,7 @@ Simple task manager
 * Show list of tasks
 * Create new task
 * Improve task description using Gemini API
+* Edit, delete task
 
 ### How to run locally
 Create a `.env` file based on `.env.example` and fill in your own values (including GEMINI_API_KEY)
