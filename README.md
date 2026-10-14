@@ -16,6 +16,11 @@ Simple task manager
 * Render
 
 ### URLs
+
+> [!WARNING]
+>
+> The live demo runs on a free hosting plan and goes to sleep when inactive. The first request after a pause can take about a minute to respond.
+
 * [Simple web interface](https://taskly-xpjl.onrender.com/tasks/)
 * [Browsable API](https://taskly-xpjl.onrender.com/api/tasks/)
 
@@ -30,5 +35,5 @@ Create a `.env` file based on `.env.example` and fill in your own values (includ
 ```bash
 git clone https://github.com/izakh13/taskly.git
 cd taskly
-docker-compose up --build
+docker compose up --build
 ```
