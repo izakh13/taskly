@@ -2,17 +2,33 @@
 {% block custom_style %}
 <style>
     .helptext {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         color: #6c757d;
+        display: flex;
+        justify-items: left;
     }
-    .helptext ul {
-        padding-left: 1.2rem;
-        margin-bottom: 0;
+    ul {
+        justify-items: left;
+        padding-left: 0rem;
     }
     li {
         list-style-type: none;
-        font-size: 0.85rem;
-        color: #6c757d
+        font-size: 0.75rem;
+        color: #6c757d;
+    }
+    label {
+        display: flex;
+    }
+    .errorlist > li {
+        list-style: none;
+        font-size: 0.7rem;
+        background-color: rgb(238, 48, 86);
+        opacity: 0.8;
+        color: white;
+        padding: 0.5rem;
+        margin: 0.1rem;
+        border-radius: 0.25rem;
+        justify-self: normal;
     }
 </style>
 {% endblock %}
@@ -24,6 +40,10 @@
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit" class="btn btn-primary">Register</button>
+            <div class="d-flex flex-row justify-content-center align-items-baseline gap-2">
+                <div class="p-2 helptext">Already registered?</div>
+                <a class="p-2" href="{% url 'login' %}">Login</a>
+            </div>
         </form>
     </div>
 </div>
