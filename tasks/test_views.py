@@ -14,9 +14,11 @@ def test_task_list_view(authenticated_client):
 def test_task_create(authenticated_client):
     task_title = 'Task title'
     task_description = 'Task description'
+    task_status = 'new'
     response = authenticated_client.post(reverse('task_create'), {
         'title': task_title,
-        'description': task_description
+        'description': task_description,
+        'status': task_status
     })
     assert response.status_code == status.HTTP_302_FOUND
     task = Task.objects.get(title=task_title)
@@ -47,12 +49,14 @@ def test_delete(authenticated_client):
 
 @pytest.mark.django_db
 def test_edit(authenticated_client):
-    task = Task.objects.create(title="Old title", description="Old description", owner=authenticated_client.user)
+    task = Task.objects.create(title="Old title", description="Old description", status='new', owner=authenticated_client.user)
     response = authenticated_client.post(reverse('edit', args=[task.id]), {
         'title': 'New title',
-        'description': 'New description'
+        'description': 'New description',
+        'status': 'in_progress'
     })
     assert response.status_code == status.HTTP_302_FOUND
     task.refresh_from_db()
     assert task.title == 'New title'
     assert task.description == 'New description'
+    assert task.status == 'in_progress'

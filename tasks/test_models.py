@@ -13,9 +13,9 @@ def test_task_title(user_init):
 def test_default_values(user_init):
     task = Task.objects.create(title='Buy milk', owner=user_init)
     expected_description = ''
-    expected_done = False
+    expected_done = 'new'
     assert task.description == expected_description
-    assert task.is_done == expected_done
+    assert task.status == expected_done
     assert task.created_at is not None
     assert task.owner == user_init
 
