@@ -1,22 +1,50 @@
 {% extends 'base.html' %}
+{% block custom_style %}
+<style>
+    .btn-custom {
+        border-radius: .40rem;
+        --bs-btn-padding-y: .1rem;
+        --bs-btn-padding-x: .2rem;
+        --bs-btn-font-size: .8rem;
+        color:white;
+        display: flex;
+        width: 100%;
+        box-sizing: border-box;
+        align-items: center;
+        justify-content: center;
+        vertical-align: middle;
+    }
+</style>
+{% endblock %}
 {% block content %}
 <ul class="list-group list-group-flush" style="max-height: 85vh; overflow-y: auto;">
     {% for task in tasks %}
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-                <div class="fw-fold">{{ task.title }}</div>
-                <span style="font-size: 13px;">{{ task.created_at }} {{ task.description }}</span>
+        <li class="list-group-item d-flex align-items-start gap-3">
+            <!-- left side -->
+            <div class="flex-grow-1">
+                <!-- title, status, data -->
+                <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
+                    <div class="d-flex align-items-center gap-2">
+                        <h5 class="mb-0">{{ task.title }}</h5>
+                        <span class="badge rounded-pill {% if task.status == 'done' %}bg-success {% elif task.status == 'in_progress' %}bg-info {% elif task.status == 'new' %}bg-primary{% endif %}" style="--bs-badge-font-size: .5em;--bs-badge-padding-x: .65em;--bs-badge-padding-y: .6em">{{ task.get_status_display }}</span>
+                    </div>
+                    <smal class="text-muted text-nowrap" style="font-size: 0.8em;">{{ task.created_at }}</small>
+                </div>
+                <!-- description -->
+                <div>{{ task.description }}</div>
             </div>
-            <div class="btn-group p-2 gap-1" role="group">
+            <!-- right side -->
+            <!-- group of buttons -->
+            <div class="d-flex gap-1 flex-column">
                 <form method="post" action="{% url 'improve' task.id %}">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Improve task description">Improve</button>
+                    <button type="submit" class="btn btn-warning btn-custom" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Improve task description">Improve</button>
                 </form>
                 <form method="post" action="{% url 'delete' task.id %}">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Delete task">Delete</button>
+                    <button type="submit" class="btn btn-danger btn-custom" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Delete task">Delete</button>
                 </form>
-                <a class="btn btn-success btn-sm" style="border-radius: .25rem" href="{% url 'edit' task.id %}" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Edit task">Edit</a>
+                <a class="btn btn-success btn-custom" href="{% url 'edit' task.id %}" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Edit task">Edit</a>
             </div>
         </li>
     {% endfor %}
