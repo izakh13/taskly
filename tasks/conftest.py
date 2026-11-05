@@ -1,5 +1,6 @@
 import pytest
 from django.contrib.auth.models import User
+from .models import Task
 
 @pytest.fixture
 def user_init():
@@ -12,3 +13,14 @@ def authenticated_client(user_init, client):
     client.user = user_init
     return client
 
+@pytest.fixture
+def create_tasks(authenticated_client):
+    def _create(amount):
+        for i in range(amount):
+            Task.objects.create(
+                title=f'Task title {i}',
+                description=f'Description for task #{i}',
+                status='new',
+                owner=authenticated_client.user
+            )
+    return _create

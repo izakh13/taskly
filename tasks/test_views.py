@@ -4,6 +4,7 @@ from unittest.mock import patch
 from django.urls import reverse
 from rest_framework import status
 from .models import Task
+from .views import TASKS_PER_PAGE
 
 @pytest.mark.django_db
 def test_task_list_view(authenticated_client):
@@ -60,3 +61,73 @@ def test_edit(authenticated_client):
     assert task.title == 'New title'
     assert task.description == 'New description'
     assert task.status == 'in_progress'
+
+@pytest.mark.django_db
+def test_pagination_first_page(authenticated_client, create_tasks):
+    tasks = create_tasks(25)
+    response = authenticated_client.get(reverse('task_list'))
+    page_obj = response.context['page_obj']
+    assert response.status_code == status.HTTP_200_OK
+    assert len(page_obj) == TASKS_PER_PAGE
+
+@pytest.mark.django_db
+def test_pagination_has_next_page_first_page(authenticated_client, create_tasks):
+    tasks = create_tasks(25)
+    response = authenticated_client.get(reverse('task_list'))
+    page_obj = response.context['page_obj']
+    assert response.status_code == status.HTTP_200_OK
+    assert page_obj.has_next() == True
+
+@pytest.mark.django_db
+def test_pagination_has_previous_page_on_first_page(authenticated_client, create_tasks):
+    tasks = create_tasks(25)
+    response = authenticated_client.get(reverse('task_list'))
+    page_obj = response.context['page_obj']
+    assert response.status_code == status.HTTP_200_OK
+    assert page_obj.has_previous() == False
+
+@pytest.mark.django_db
+def test_pagination_has_next_page_second_page(authenticated_client, create_tasks):
+    tasks = create_tasks(25)
+    response = authenticated_client.get(reverse('task_list'), {'page': 2})
+    page_obj = response.context['page_obj']
+    assert response.status_code == status.HTTP_200_OK
+    assert page_obj.has_next() == True
+
+@pytest.mark.django_db
+def test_pagination_has_previous_page_on_second_page(authenticated_client, create_tasks):
+    tasks = create_tasks(25)
+    response = authenticated_client.get(reverse('task_list'), {'page': 2})
+    page_obj = response.context['page_obj']
+    assert response.status_code == status.HTTP_200_OK
+    assert page_obj.has_previous() == True
+
+@pytest.mark.django_db
+def test_pagination_has_previous_page_on_last_page(authenticated_client, create_tasks):
+    TASK_AMOUNT = 25
+    tasks = create_tasks(TASK_AMOUNT)
+    import math
+    response = authenticated_client.get(reverse('task_list'), {'page': math.ceil(TASK_AMOUNT/TASKS_PER_PAGE)})
+    page_obj = response.context['page_obj']
+    assert response.status_code == status.HTTP_200_OK
+    assert page_obj.has_previous() == True
+
+@pytest.mark.django_db
+def test_pagination_has_next_page_on_last_page(authenticated_client, create_tasks):
+    TASK_AMOUNT = 25
+    tasks = create_tasks(TASK_AMOUNT)
+    import math
+    response = authenticated_client.get(reverse('task_list'), {'page': math.ceil(TASK_AMOUNT/TASKS_PER_PAGE)})
+    page_obj = response.context['page_obj']
+    assert response.status_code == status.HTTP_200_OK
+    assert page_obj.has_next() == False
+
+@pytest.mark.django_db
+def test_pagination_tasks_amount_on_last_page(authenticated_client, create_tasks):
+    TASK_AMOUNT = 25
+    tasks = create_tasks(TASK_AMOUNT)
+    import math
+    response = authenticated_client.get(reverse('task_list'), {'page': math.ceil(TASK_AMOUNT/TASKS_PER_PAGE)})
+    page_obj = response.context['page_obj']
+    assert response.status_code == status.HTTP_200_OK
+    assert len(page_obj) == 5

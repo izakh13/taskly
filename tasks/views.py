@@ -10,6 +10,8 @@ from .forms import TaskForm, StyledUserCreationForm
 from .services import improve_task_description
 from .serializers import TaskSerializer
 
+TASKS_PER_PAGE = 10
+
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
@@ -23,8 +25,8 @@ class TaskViewSet(viewsets.ModelViewSet):
 
 @login_required
 def task_list(request):
-    tasks = Task.objects.filter(owner=request.user)
-    paginator = Paginator(tasks, 10)
+    tasks = Task.objects.filter(owner=request.user).order_by('-created_at')
+    paginator = Paginator(tasks, TASKS_PER_PAGE)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     page_range = range(1, page_obj.paginator.num_pages+1)
