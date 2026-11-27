@@ -16,6 +16,7 @@ services:
       args:
         - "USER_ID=${USER_ID:-1000}"
         - "USER_GID=${USER_GID:-1000}"
+        - "INSTALL_DEV_DEPENDENCIES=${INSTALL_DEV_DEPENDENCIES:-true}"
     ports:
       - "8000:8000"
     volumes:

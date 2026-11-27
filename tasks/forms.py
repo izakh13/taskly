@@ -15,8 +15,12 @@ class CategoryForm(forms.ModelForm):
         fields = ["name"]
 
     def clean_name(self):
-        if Category.objects.filter(name=self.cleaned_data["name"], owner=self.user).exclude(pk=self.instance.pk).exists():
-            raise forms.ValidationError('Category is already created!')
+        if (
+            Category.objects.filter(name=self.cleaned_data["name"], owner=self.user)
+            .exclude(pk=self.instance.pk)
+            .exists()
+        ):
+            raise forms.ValidationError("Category is already created!")
         return self.cleaned_data["name"]
 
 
