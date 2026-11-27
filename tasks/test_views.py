@@ -1,45 +1,43 @@
 from unittest.mock import patch
 
-from django.contrib import auth
 import pytest
-from django.contrib.auth.models import User
 from django.urls import reverse
 from rest_framework import status
 
-from .models import Task, Category
+from .models import Category, Task
 from .views import TASKS_PER_PAGE
+
 
 @pytest.mark.django_db
 def test_category_create(authenticated_client):
     category_name = "Programming"
     response = authenticated_client.post(
-        reverse("category_create"),
-        {"name": category_name}
+        reverse("category_create"), {"name": category_name}
     )
     assert response.status_code == status.HTTP_302_FOUND
     category = Category.objects.get(name=category_name)
     assert category.name == category_name
     assert category.owner == authenticated_client.user
-    assert response.url == reverse('category_list')
+    assert response.url == reverse("category_list")
+
 
 @pytest.mark.django_db
 def test_duplicate_category_create(authenticated_client):
     category_name = "Programming"
     response = authenticated_client.post(
-        reverse("category_create"),
-        {"name": category_name}
+        reverse("category_create"), {"name": category_name}
     )
     assert response.status_code == status.HTTP_302_FOUND
     category = Category.objects.get(name=category_name)
     assert category.name == category_name
     assert category.owner == authenticated_client.user
     response = authenticated_client.post(
-        reverse("category_create"),
-        {"name": category_name}
+        reverse("category_create"), {"name": category_name}
     )
     category_count = Category.objects.filter(name=category_name).count()
     assert category_count == 1
     assert response.status_code == status.HTTP_200_OK
+
 
 @pytest.mark.django_db
 def test_category_create_for_different_users(multiple_authenticated_clients):
@@ -48,8 +46,7 @@ def test_category_create_for_different_users(multiple_authenticated_clients):
     assert first_client.user != second_client.user
     category_name = "Favorite"
     response_user1 = first_client.post(
-        reverse("category_create"),
-        {"name": category_name}
+        reverse("category_create"), {"name": category_name}
     )
     category_user = Category.objects.get(name=category_name, owner=first_client.user)
     assert response_user1.status_code == status.HTTP_302_FOUND
@@ -59,8 +56,7 @@ def test_category_create_for_different_users(multiple_authenticated_clients):
 
     # create category for second user
     response_user2 = second_client.post(
-         reverse("category_create"),
-         {"name": category_name}
+        reverse("category_create"), {"name": category_name}
     )
     category_user1 = Category.objects.get(name=category_name, owner=second_client.user)
     assert response_user2.status_code == status.HTTP_302_FOUND
@@ -68,10 +64,12 @@ def test_category_create_for_different_users(multiple_authenticated_clients):
     assert category_user1.name == category_name
     assert category_user1.owner == second_client.user
 
+
 @pytest.mark.django_db
 def test_task_list_view(authenticated_client):
     response = authenticated_client.get(reverse("task_list"))
     assert response.status_code == status.HTTP_200_OK
+
 
 @pytest.mark.django_db
 def test_task_create(authenticated_client):
@@ -85,6 +83,7 @@ def test_task_create(authenticated_client):
     assert response.status_code == status.HTTP_302_FOUND
     task = Task.objects.get(title=task_title)
     assert task.description == task_description
+
 
 @pytest.mark.django_db
 @patch("tasks.views.improve_task_description")
