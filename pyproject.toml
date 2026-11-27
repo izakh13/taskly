@@ -11,3 +11,6 @@ skip-magic-trailing-comma = false
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "DJ"]
+
+[tool.ruff.lint.per-file-ignores]
+"**/settings.py" = ["E501"]

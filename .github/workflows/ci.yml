@@ -39,7 +39,7 @@ jobs:
       - name: Run Ruff linter
         run: ruff check .
          
-      - name: Run Ruff formater
+      - name: Run Ruff formatter
         run: ruff format --check .
 
       - name: Run tests
