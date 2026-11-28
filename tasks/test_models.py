@@ -1,4 +1,3 @@
-
 import pytest
 
 from tasks.models import Task

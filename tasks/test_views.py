@@ -157,7 +157,7 @@ def test_pagination_has_next_page_first_page(authenticated_client, create_tasks)
     response = authenticated_client.get(reverse("task_list"))
     page_obj = response.context["page_obj"]
     assert response.status_code == status.HTTP_200_OK
-    assert page_obj.has_next() == True
+    assert page_obj.has_next()
 
 
 @pytest.mark.django_db
@@ -166,7 +166,7 @@ def test_pagination_has_previous_page_on_first_page(authenticated_client, create
     response = authenticated_client.get(reverse("task_list"))
     page_obj = response.context["page_obj"]
     assert response.status_code == status.HTTP_200_OK
-    assert page_obj.has_previous() == False
+    assert not page_obj.has_previous()
 
 
 @pytest.mark.django_db
@@ -175,7 +175,7 @@ def test_pagination_has_next_page_second_page(authenticated_client, create_tasks
     response = authenticated_client.get(reverse("task_list"), {"page": 2})
     page_obj = response.context["page_obj"]
     assert response.status_code == status.HTTP_200_OK
-    assert page_obj.has_next() == True
+    assert page_obj.has_next()
 
 
 @pytest.mark.django_db
@@ -186,7 +186,7 @@ def test_pagination_has_previous_page_on_second_page(
     response = authenticated_client.get(reverse("task_list"), {"page": 2})
     page_obj = response.context["page_obj"]
     assert response.status_code == status.HTTP_200_OK
-    assert page_obj.has_previous() == True
+    assert page_obj.has_previous()
 
 
 @pytest.mark.django_db
@@ -200,7 +200,7 @@ def test_pagination_has_previous_page_on_last_page(authenticated_client, create_
     )
     page_obj = response.context["page_obj"]
     assert response.status_code == status.HTTP_200_OK
-    assert page_obj.has_previous() == True
+    assert page_obj.has_previous()
 
 
 @pytest.mark.django_db
@@ -214,7 +214,7 @@ def test_pagination_has_next_page_on_last_page(authenticated_client, create_task
     )
     page_obj = response.context["page_obj"]
     assert response.status_code == status.HTTP_200_OK
-    assert page_obj.has_next() == False
+    assert not page_obj.has_next()
 
 
 @pytest.mark.django_db
